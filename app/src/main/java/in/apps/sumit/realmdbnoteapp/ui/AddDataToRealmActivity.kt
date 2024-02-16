@@ -4,14 +4,12 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import `in`.apps.sumit.realmdbnoteapp.databinding.ActivityAddDataToRealmBinding
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.Note
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.RealmApplication
 import io.realm.kotlin.Realm
-import io.realm.kotlin.delete
-import io.realm.kotlin.ext.query
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -24,8 +22,7 @@ class AddDataToRealmActivity : AppCompatActivity() {
         binding = ActivityAddDataToRealmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
+        supportActionBar?.title = "Add Data To Note"
 
         binding.cancel.setOnClickListener {
             binding.editContent.clearComposingText()
@@ -37,44 +34,30 @@ class AddDataToRealmActivity : AppCompatActivity() {
         }
 
         binding.done.setOnClickListener {
-
             // write to realm db
+            if(binding.editContent.text.toString() != "" || binding.editTitle.text.toString() != ""){
+                lifecycleScope.launch {
+                    realm.write {
+                        val note = Note().apply {
+                            val sdf = SimpleDateFormat("dd/MM/yyyy hh:mm")
 
-            lifecycleScope.launch {
-                realm.write {
-                    val note = Note().apply {
-                        val sdf = SimpleDateFormat("dd/MM/yyyy  hh:mm")
-
-                        content = binding.editContent.text.toString()
-                        date = sdf.format(Date()).toString()
-                        title = binding.editTitle.text.toString()
+                            content = binding.editContent.text.toString()
+                            date = sdf.format(Date()).toString()
+                            title = binding.editTitle.text.toString()
+                        }
+                        copyToRealm(note)
                     }
-
-                    copyToRealm(note)
                 }
-            }
 
 
-            val intent = Intent(this@AddDataToRealmActivity,MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-    }
+                Toast.makeText(this,"Done", Toast.LENGTH_SHORT).show()
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        lifecycleScope.launch {
-            realm.write {
-                val note = Note().apply {
-                    val sdf = SimpleDateFormat("dd/MM/yyyy hh:mm")
-
-                    content = binding.editContent.text.toString()
-                    date = sdf.format(Date()).toString()
-                    title = binding.editTitle.text.toString()
-                }
+                val intent = Intent(this@AddDataToRealmActivity,MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                Toast.makeText(this,"Invalid Inputs",Toast.LENGTH_SHORT).show()
             }
         }
     }
-
-
 }

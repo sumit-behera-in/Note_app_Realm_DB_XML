@@ -2,4 +2,5 @@
     <string name="app_name">Realmdb Note App</string>
     <string name="add">add</string>
     <string name="title">Title</string>
+    <string name="enter_your_note">Enter your Note</string>
 </resources>

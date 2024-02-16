@@ -5,6 +5,7 @@ import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.widget.Toast
 import `in`.apps.sumit.realmdbnoteapp.databinding.ActivityEditBinding
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.Note
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.RealmApplication.Companion.realm
@@ -17,6 +18,8 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.title = "Edit The Note"
 
         val bundle : Bundle? = intent.extras
 
@@ -33,20 +36,27 @@ class EditActivity : AppCompatActivity() {
 
 
         binding.done.setOnClickListener {
-            val query = realm.query<Note>("date == $0 && content == $1 && title == $2",date,content,title).find().first()
-            query.also { it ->
-                realm.writeBlocking {
-                    val sdf = SimpleDateFormat("dd/MM/yyyy  hh:mm")
+            if(binding.editContent.text.toString() != "" || binding.editTitle.text.toString() != ""){
+                val query = realm.query<Note>("date == $0 && content == $1 && title == $2",date,content,title).find().first()
+                query.also { it ->
+                    realm.writeBlocking {
+                        val sdf = SimpleDateFormat("dd/MM/yyyy  hh:mm")
 
-                    findLatest(it)?.title = binding.editTitle.text.toString()
-                    findLatest(it)?.content = binding.editContent.text.toString()
-                    findLatest(it)?.date =sdf.format(Date()).toString()
+                        findLatest(it)?.title = binding.editTitle.text.toString()
+                        findLatest(it)?.content = binding.editContent.text.toString()
+                        findLatest(it)?.date =sdf.format(Date()).toString()
+                    }
                 }
+
+                Toast.makeText(this,"Done", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this@EditActivity,MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                Toast.makeText(this,"Invalid Inputs", Toast.LENGTH_SHORT).show()
             }
 
-            val intent = Intent(this@EditActivity,MainActivity::class.java)
-            startActivity(intent)
-            finish()
         }
 
         binding.cancel.setOnClickListener {

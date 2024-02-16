@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         binding.myRecyclerView.layoutManager =GridLayoutManager(this,1)
-        val data:List<Note> = realm.query<Note>().find()
+        val data:ArrayList<Note> = ArrayList(realm.query<Note>().find())
         binding.myRecyclerView.adapter =MainActivityRecyclerViewAdapter(data,this@MainActivity,realm)
 
         binding.floatingActionButton.setOnClickListener {

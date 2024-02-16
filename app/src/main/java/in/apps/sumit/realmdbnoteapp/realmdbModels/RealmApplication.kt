@@ -1,22 +1,12 @@
 package `in`.apps.sumit.realmdbnoteapp.realmdbModels
 
-import android.app.Application
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 
-class RealmApplication:Application() {
+class RealmApplication {
     companion object{
-        lateinit var realm : Realm
+        private val configuration = RealmConfiguration.create(schema = setOf(Note::class))
+        val realm = Realm.open(configuration)
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        realm = Realm.open(
-            configuration = RealmConfiguration.create(
-                schema = setOf(
-                    Note::class
-                )
-            )
-        )
-    }
 }

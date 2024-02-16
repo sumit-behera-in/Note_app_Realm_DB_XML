@@ -9,8 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import `in`.apps.sumit.realmdbnoteapp.R
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.Note
+import io.realm.kotlin.Realm
 
-class MainActivityRecyclerViewAdapter(val data:List<Note>, val context: Context):RecyclerView.Adapter<MainActivityRecyclerViewAdapter.Holder>() {
+class MainActivityRecyclerViewAdapter(val data:List<Note>, val context: Context,val realm: Realm):RecyclerView.Adapter<MainActivityRecyclerViewAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val layoutInflater  = LayoutInflater.from(context)
         val view = layoutInflater.inflate(R.layout.single_note,parent,false)
@@ -19,10 +20,11 @@ class MainActivityRecyclerViewAdapter(val data:List<Note>, val context: Context)
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val note :Note = data[position]
-        holder.data.text = note.content
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        holder.date.text = sdf.format(note.date).toString()
+        holder.content.text = note.content
+        holder.date.text = note.date
         holder.heading.text = note.title
+
+
     }
 
     override fun getItemCount(): Int {
@@ -31,7 +33,7 @@ class MainActivityRecyclerViewAdapter(val data:List<Note>, val context: Context)
 
     class Holder(itemView: View): RecyclerView.ViewHolder(itemView){
         val heading : TextView = itemView.findViewById(R.id.heading)
-        val data :TextView = itemView.findViewById(R.id.content)
+        val content :TextView = itemView.findViewById(R.id.content)
         val date:TextView = itemView.findViewById(R.id.date)
     }
 }

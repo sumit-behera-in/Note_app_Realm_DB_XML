@@ -6,8 +6,8 @@ import org.mongodb.kbson.ObjectId
 import java.util.Date
 
 class Note :RealmObject {
-    @PrimaryKey var _id : ObjectId = ObjectId()
+    @PrimaryKey var id : ObjectId = ObjectId()
     var content :String = ""
-    var date : Date = Date()
+    var date : String = ""
     var title : String = ""
 }

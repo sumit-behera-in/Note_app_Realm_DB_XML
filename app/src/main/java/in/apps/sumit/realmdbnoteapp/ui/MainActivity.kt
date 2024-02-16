@@ -1,5 +1,6 @@
 package `in`.apps.sumit.realmdbnoteapp.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,7 +22,14 @@ class MainActivity : AppCompatActivity() {
 
         binding.myRecyclerView.layoutManager =GridLayoutManager(this,1)
         val data:List<Note> = realm.query<Note>().find()
-        binding.myRecyclerView.adapter =MainActivityRecyclerViewAdapter(data,this@MainActivity)
+        binding.myRecyclerView.adapter =MainActivityRecyclerViewAdapter(data,this@MainActivity,realm)
+
+        binding.floatingActionButton.setOnClickListener {
+            val intent = Intent(this,AddDataToRealmActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
     }
 }

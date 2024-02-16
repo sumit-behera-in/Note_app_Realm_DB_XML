@@ -4,22 +4,28 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.text.Editable
 import androidx.lifecycle.lifecycleScope
 import `in`.apps.sumit.realmdbnoteapp.databinding.ActivityAddDataToRealmBinding
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.Note
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.RealmApplication
 import io.realm.kotlin.Realm
+import io.realm.kotlin.delete
+import io.realm.kotlin.ext.query
 import kotlinx.coroutines.launch
 import java.util.Date
 
 class AddDataToRealmActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddDataToRealmBinding
     private val realm :Realm = RealmApplication.realm
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddDataToRealmBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+
 
         binding.cancel.setOnClickListener {
             binding.editContent.clearComposingText()

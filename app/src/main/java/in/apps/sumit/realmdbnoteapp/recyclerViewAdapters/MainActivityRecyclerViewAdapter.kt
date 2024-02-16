@@ -2,6 +2,7 @@ package `in`.apps.sumit.realmdbnoteapp.recyclerViewAdapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import `in`.apps.sumit.realmdbnoteapp.R
 import `in`.apps.sumit.realmdbnoteapp.realmdbModels.Note
+import `in`.apps.sumit.realmdbnoteapp.ui.EditActivity
 import io.realm.kotlin.Realm
-import io.realm.kotlin.delete
-import io.realm.kotlin.ext.query
 
 class MainActivityRecyclerViewAdapter(val data:ArrayList<Note>, val context: Context,val realm: Realm):RecyclerView.Adapter<MainActivityRecyclerViewAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -31,6 +31,10 @@ class MainActivityRecyclerViewAdapter(val data:ArrayList<Note>, val context: Con
             delete(note,position)
             true
         }
+
+        holder.itemView.setOnClickListener {
+            update(note)
+        }
     }
     @SuppressLint("NotifyDataSetChanged")
     private fun delete(note: Note,i:Int){
@@ -40,6 +44,14 @@ class MainActivityRecyclerViewAdapter(val data:ArrayList<Note>, val context: Con
         data.removeAt(i)
         notifyDataSetChanged()
         Toast.makeText(context,"Deleted",Toast.LENGTH_SHORT).show()
+    }
+
+    private fun update(note:Note){
+        val intent = Intent(context, EditActivity::class.java)
+        intent.putExtra("title",note.title)
+        intent.putExtra("content",note.content)
+        intent.putExtra("date",note.date)
+        context.startActivity(intent)
     }
 
     override fun getItemCount(): Int {
